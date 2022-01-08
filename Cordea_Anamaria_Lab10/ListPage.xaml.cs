@@ -36,13 +36,7 @@ namespace Cordea_Anamaria_Lab10
             {
                 BindingContext = new Product()
             });
-        }
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            var shopl = (ShopList)BindingContext;
 
-            listView.ItemsSource = await App.Database.GetListProductsAsync(shopl.ID);
         }
     }
 }

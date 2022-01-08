@@ -17,20 +17,15 @@ namespace Cordea_Anamaria_Lab10
             {
                 if (database == null)
                 {
-                    database = new
-                   ShoppingListDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.
-                   LocalApplicationData), "ShoppingList.db3"));
+                    database = new ShoppingListDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ShoppingList.db3"));
                 }
                 return database;
             }
         }
-
         public App()
         {
             InitializeComponent();
             MainPage = new NavigationPage(new ListEntryPage());
-            DependencyService.Register<MockDataStore>();
-            MainPage = new AppShell();
         }
 
         protected override void OnStart()

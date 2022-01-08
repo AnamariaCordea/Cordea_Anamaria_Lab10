@@ -1,11 +1,9 @@
-﻿using System;
-using SQLite;
-using System.Threading.Tasks;
-using Cordea_Anamaria_Lab10.Models;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Collections;
-using Cordea_Anamaria_Lab10;
+using System.Threading.Tasks;
+using Cordea_Anamaria_Lab10.Models;
 
 namespace Cordea_Anamaria_Lab10.Data
 {
@@ -18,6 +16,25 @@ namespace Cordea_Anamaria_Lab10.Data
             _database.CreateTableAsync<ShopList>().Wait();
             _database.CreateTableAsync<Product>().Wait();
             _database.CreateTableAsync<ListProduct>().Wait();
+        }
+        public Task<int> SaveProductAsync(Product product)
+        {
+            if (product.ID != 0)
+            {
+                return _database.UpdateAsync(product);
+            }
+            else
+            {
+                return _database.InsertAsync(product);
+            }
+        }
+        public Task<int> DeleteProductAsync(Product product)
+        {
+            return _database.DeleteAsync(product);
+        }
+        public Task<List<Product>> GetProductsAsync()
+        {
+            return _database.Table<Product>().ToListAsync();
         }
         public Task<List<ShopList>> GetShopListsAsync()
         {
@@ -44,35 +61,6 @@ namespace Cordea_Anamaria_Lab10.Data
         {
             return _database.DeleteAsync(slist);
         }
-        public Task<int> SaveProductAsync(Product product)
-        {
-            if (product.ID != 0)
-            {
-                return _database.UpdateAsync(product);
-            }
-            else
-            {
-                return _database.InsertAsync(product);
-            }
-        }
-
-        public Task<List<Product>> GetListProductsAsync(int shoplistid)
-        {
-            return _database.QueryAsync<Product>(
-            "select P.ID, P.Description from Product P"
-            + " inner join ListProduct LP"
-            + " on P.ID = LP.ProductID where LP.ShopListID = ?",
-            shoplistid);
-        }
-
-        public Task<int> DeleteProductAsync(Product product)
-        {
-            return _database.DeleteAsync(product);
-        }
-        public Task<List<Product>> GetProductsAsync()
-        {
-            return _database.Table<Product>().ToListAsync();
-        }
         public Task<int> SaveListProductAsync(ListProduct listp)
         {
             if (listp.ID != 0)
@@ -84,14 +72,15 @@ namespace Cordea_Anamaria_Lab10.Data
                 return _database.InsertAsync(listp);
             }
         }
-        //public Task<List<Product>> GetListProductsAsync(int shoplistid)
-        //{
-        //    return _database.QueryAsync<Product>(
-        //    "select P.ID, P.Description from Product P"
-        //    + " inner join ListProduct LP"
-        //    + " on P.ID = LP.ProductID where LP.ShopListID = ?",
-        //    shoplistid);
-        //}
+        public Task<List<Product>> GetListProductsAsync(int shoplistid)
+        {
+            return _database.QueryAsync<Product>(
+            "select P.ID, P.Description from Product P"
+            + " inner join ListProduct LP"
+            + " on P.ID = LP.ProductID where LP.ShopListID = ?",
+            shoplistid);
+        }
+
     }
 }
 
